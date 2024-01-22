@@ -11,9 +11,9 @@ class CalculatorView extends StatefulWidget {
 }
 
 class _CalculatorState extends State<CalculatorView> {
-  String n1 = '';
+  String firstInput = '';
   String operand = '';
-  String n2 = '';
+  String secondInput = '';
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +33,9 @@ class _CalculatorState extends State<CalculatorView> {
               child: SingleChildScrollView(
                 reverse: true,
                 child: Container(
-                  // color: Colors.purple,
                   alignment: Alignment.bottomRight,
                   padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
                   child: Text(
-                    // '0',
                     supportView(),
                     style: Style.secondaryResultStyle,
                     textAlign: TextAlign.end,
@@ -45,19 +43,15 @@ class _CalculatorState extends State<CalculatorView> {
                 ),
               ),
             ),
-
-            //
             //MainResult
             Expanded(
               flex: 0,
               child: SingleChildScrollView(
                 reverse: true,
                 child: Container(
-                  // color: Colors.green,
                   alignment: Alignment.bottomRight,
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Text(
-                    // '$n1$operand$n2',
                     mainView(),
                     style: Style.mainResultStyle,
                     textAlign: TextAlign.end,
@@ -69,7 +63,6 @@ class _CalculatorState extends State<CalculatorView> {
             //Button panel
             Container(
               alignment: Alignment.center,
-              // padding: EdgeInsets.only(bottom: 100),
               color: Colors.black,
               width: sizeScreen.width,
               height: sizeScreen.height / 1.8,
@@ -90,21 +83,25 @@ class _CalculatorState extends State<CalculatorView> {
 
   //view
   String mainView() {
-    if (n1.isEmpty && n2.isEmpty) {
+    if (firstInput.isEmpty && secondInput.isEmpty) {
       return '0';
-    } else if (n1.isNotEmpty && operand.isEmpty) {
-      return n1;
-    } else if (n1.isNotEmpty && operand.isNotEmpty && n2.isEmpty) {
-      return n1;
-    } else if (n1.isNotEmpty && operand.isNotEmpty && n2.isNotEmpty) {
-      return n2;
+    } else if (firstInput.isNotEmpty && operand.isEmpty) {
+      return firstInput;
+    } else if (firstInput.isNotEmpty &&
+        operand.isNotEmpty &&
+        secondInput.isEmpty) {
+      return firstInput;
+    } else if (firstInput.isNotEmpty &&
+        operand.isNotEmpty &&
+        secondInput.isNotEmpty) {
+      return secondInput;
     }
     return '';
   }
 
   String supportView() {
-    if (n1.isNotEmpty && operand.isNotEmpty) {
-      return '$n1 $operand';
+    if (firstInput.isNotEmpty && operand.isNotEmpty) {
+      return '$firstInput $operand';
     } else {
       return '';
     }
@@ -112,19 +109,21 @@ class _CalculatorState extends State<CalculatorView> {
 
   void toToggleSing() {
     setState(() {
-      if (n1.isNotEmpty && operand.isEmpty) {
-        if (n1.contains('-')) {
-          n1 = n1.replaceAll('-', '');
-        } else if (!n1.contains('-')) {
-          n1 = '-$n1';
+      if (firstInput.isNotEmpty && operand.isEmpty) {
+        if (firstInput.contains('-')) {
+          firstInput = firstInput.replaceAll('-', '');
+        } else if (!firstInput.contains('-')) {
+          firstInput = '-$firstInput';
         }
       }
 
-      if (n1.isNotEmpty && operand.isNotEmpty && n2.isNotEmpty) {
-        if (n2.contains('-')) {
-          n2 = n2.replaceAll('-', '');
-        } else if (!n2.contains('-')) {
-          n2 = '-$n2';
+      if (firstInput.isNotEmpty &&
+          operand.isNotEmpty &&
+          secondInput.isNotEmpty) {
+        if (secondInput.contains('-')) {
+          secondInput = secondInput.replaceAll('-', '');
+        } else if (!secondInput.contains('-')) {
+          secondInput = '-$secondInput';
         }
       }
     });
@@ -140,57 +139,57 @@ class _CalculatorState extends State<CalculatorView> {
   }
 
   void toCalculate() {
-    if (n1.isEmpty) return;
+    if (firstInput.isEmpty) return;
     if (operand.isEmpty) return;
-    if (n2.isEmpty) return;
+    if (secondInput.isEmpty) return;
 
-    final double numb1 = double.parse(n1);
-    final double numb2 = double.parse(n2);
+    final double convertFirstInput = double.parse(firstInput);
+    final double convertSecondInput = double.parse(secondInput);
 
     var result = 0.0;
 
     switch (operand) {
       case Btns.divide:
-        result = numb1 / numb2;
+        result = convertFirstInput / convertSecondInput;
         break;
       case Btns.multiply:
-        result = numb1 * numb2;
+        result = convertFirstInput * convertSecondInput;
         break;
       case Btns.subtract:
-        result = numb1 - numb2;
+        result = convertFirstInput - convertSecondInput;
         break;
       case Btns.add:
-        result = numb1 + numb2;
+        result = convertFirstInput + convertSecondInput;
         break;
     }
 
     setState(() {
-      n1 = result.toStringAsPrecision(3);
+      firstInput = result.toStringAsPrecision(3);
 
-      if (n1.endsWith('.0')) {
-        n1 = n1.substring(0, n1.length - 2);
-      } else if (n1.endsWith('.00')) {
-        n1 = n1.substring(0, n1.length - 3);
+      if (firstInput.endsWith('.0')) {
+        firstInput = firstInput.substring(0, firstInput.length - 2);
+      } else if (firstInput.endsWith('.00')) {
+        firstInput = firstInput.substring(0, firstInput.length - 3);
       }
 
       operand = '';
-      n2 = '';
+      secondInput = '';
     });
   }
 
   void toPercentage() {
-    final nconvert = double.parse(n1);
+    final nconvert = double.parse(firstInput);
     setState(() {
-      n1 = "${(nconvert / 100)}";
+      firstInput = "${(nconvert / 100)}";
       operand = '';
-      n2 = '';
+      secondInput = '';
     });
 
     if (operand.isNotEmpty) {
       return;
     }
 
-    if (n1.isNotEmpty && operand.isNotEmpty && n2.isNotEmpty) {
+    if (firstInput.isNotEmpty && operand.isNotEmpty && secondInput.isNotEmpty) {
       toCalculate();
     }
   }
@@ -199,14 +198,14 @@ class _CalculatorState extends State<CalculatorView> {
     setState(() {
       if (value != Btns.dot && int.tryParse(value) == null) {
         if (value == Btns.equal &&
-            n1.isNotEmpty &&
+            firstInput.isNotEmpty &&
             operand.isNotEmpty &&
-            n2.isNotEmpty) {
+            secondInput.isNotEmpty) {
           toCalculate();
           return;
         }
 
-        if (value == Btns.percent && n1.isNotEmpty) {
+        if (value == Btns.percent && firstInput.isNotEmpty) {
           toPercentage();
           return;
         }
@@ -216,29 +215,31 @@ class _CalculatorState extends State<CalculatorView> {
           return;
         }
 
-        if (n1.isNotEmpty && operand.isEmpty) {
+        if (firstInput.isNotEmpty && operand.isEmpty) {
           operand += value;
         }
       }
-      if (n1.isEmpty || operand.isEmpty) {
-        if (value == Btns.dot && n1.contains(Btns.dot)) return;
+      if (firstInput.isEmpty || operand.isEmpty) {
+        if (value == Btns.dot && firstInput.contains(Btns.dot)) return;
 
         if (int.tryParse(value) != null || value == Btns.dot) {
-          if (value == Btns.dot && (n1.isEmpty || n1 == Btns.n0)) {
-            n1 = '0.';
+          if (value == Btns.dot &&
+              (firstInput.isEmpty || firstInput == Btns.n0)) {
+            firstInput = '0.';
           } else {
-            n1 += value;
+            firstInput += value;
           }
         }
       }
-      if (n1.isNotEmpty && operand.isNotEmpty) {
-        if (value == Btns.dot && n2.contains(Btns.dot)) return;
+      if (firstInput.isNotEmpty && operand.isNotEmpty) {
+        if (value == Btns.dot && secondInput.contains(Btns.dot)) return;
 
         if (int.tryParse(value) != null || value == Btns.dot) {
-          if (value == Btns.dot && (n2.isEmpty || n2 == Btns.n0)) {
-            n2 = '0.';
+          if (value == Btns.dot &&
+              (secondInput.isEmpty || secondInput == Btns.n0)) {
+            secondInput = '0.';
           } else {
-            n2 += value;
+            secondInput += value;
           }
         }
       }
@@ -247,9 +248,9 @@ class _CalculatorState extends State<CalculatorView> {
 
   void clearAll() {
     setState(() {
-      n1 = '';
+      firstInput = '';
       operand = '';
-      n2 = '';
+      secondInput = '';
     });
   }
 }
