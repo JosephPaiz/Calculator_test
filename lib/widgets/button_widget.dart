@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:calculator_test/style.dart';
-import 'package:calculator_test/buttons.dart';
+import 'package:calculator_test/resources/style.dart';
+import 'package:calculator_test/resources/buttons.dart';
 
 class ButtonCalculator extends StatefulWidget {
   const ButtonCalculator(
