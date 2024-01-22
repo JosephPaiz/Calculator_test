@@ -83,20 +83,6 @@ class _CalculatorState extends State<CalculatorView> {
 
   //view
   String mainView() {
-    // if (firstInput.isEmpty && secondInput.isEmpty) {
-    //   return '0';
-    // } else if (firstInput.isNotEmpty && operand.isEmpty) {
-    //   return firstInput;
-    // } else if (firstInput.isNotEmpty &&
-    //     operand.isNotEmpty &&
-    //     secondInput.isEmpty) {
-    //   return firstInput;
-    // } else if (firstInput.isNotEmpty &&
-    //     operand.isNotEmpty &&
-    //     secondInput.isNotEmpty) {
-    //   return secondInput;
-    // }
-
     if (firstInput.isEmpty && secondInput.isEmpty) {
       return '0';
     } else if (firstInput.isNotEmpty && secondInput.isEmpty) {
